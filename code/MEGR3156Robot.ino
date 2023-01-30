@@ -5,7 +5,9 @@
 #define CMD A1
 #define SEL A2
 #define CLK A3
+int RYPOS=0;
 int LYPOS=0;
+bool triggers;
 PS2X ps2x;
 drivetrain motors;
 
@@ -17,8 +19,13 @@ void setup() {
 }
 
 void loop() {
-  ps2x.read_gamepad(); //read controller and set large motor to spin at 'vibrate' speed   
+  ps2x.read_gamepad(); //read controller
+  if(ps2x.ButtonPressed(PSB_L2)||ps2x.ButtonPressed(PSB_R2)){
+    if(ps2x.ButtonPressed(PSB_L2))triggers=true;
+    if(ps2x.ButtonPressed(PSB_R2))triggers=false;
+    motors.gripper(triggers);
+  }
+  RYPOS=ps2x.Analog(PSS_RY);
   LYPOS=ps2x.Analog(PSS_LY);
-  if(LYPOS==255)return;
-  motors.foward(LYPOS);
+  motors.forward(LYPOS,RYPOS);
 }

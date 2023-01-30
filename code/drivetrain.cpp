@@ -2,28 +2,32 @@
 #include <Servo.h>
 #define LEFTPIN 8
 #define RIGHTPIN 9
+#define upperThreshold 120
+#define lowerThreshold 60
 
 
 class drivetrain{
     private:
       Servo servoLeft;
       Servo servoRight;
-      int upperThreshold = 120;
-      int lowerThreshold = 60;
-      int degrees;
-      int calculateLeft(int yInputL, int xInputL){
-        degrees = map(yInputL, 0,255,180,0);
-        if(degrees>lowerThreshold&&degrees<upperThreshold){
-          degrees = 90;
+      int degreesL;
+      int degreesR;
+      bool closed;
+      int calculateLeft(int yInputL){
+        if(yInputL==255)return 1000;
+        degreesL = map(yInputL, 0,255,180,0);
+        if(degreesL>lowerThreshold&&degreesL<upperThreshold){
+          degreesL = 90;
         }
-        return degrees;
+        return degreesL;
       }
-      int calculateRight(int yInputR,int xInputR){
-        degrees = map(yInputR, 0,255,180,0);
-        if(degrees>lowerThreshold&&degrees<upperThreshold){
-          degrees = 90;
+      int calculateRight(int yInputR){        
+        if(yInputR==255)return 1000;
+        degreesR = map(yInputR, 0,255,0,180);
+        if(degreesR>lowerThreshold&&degreesR<upperThreshold){
+          degreesR = 90;
         }
-        return degrees;
+        return degreesR;
       }
     public:
         void intitialize(){
@@ -31,10 +35,28 @@ class drivetrain{
           servoRight.attach(RIGHTPIN);
           return;
         }
-        void foward(int joystick){
-          int speed = calculateLeft(joystick,0);
-          servoLeft.write(speed);
-          servoRight.write(speed);
-          Serial.println(speed);
+        void forward(int Ljoystick,int Rjoystick){
+          int Lspeed = calculateLeft(Ljoystick);
+          int Rspeed = calculateRight(Rjoystick);
+          if(Lspeed!=1000){
+            servoLeft.write(Lspeed);
+          }
+          if(Rspeed!=1000){
+            servoRight.write(Rspeed);
+          } 
+        }
+        void gripper(bool mode){
+          if(mode==closed)return;
+          if(mode==true){
+            Serial.println("Gripper opened");
+            closed=mode;
+            //Open the servo here
+          }
+          if(mode==false){
+            //Close the servo here
+            Serial.println("Gripper closed");
+            closed=mode;
+          }
+          
         }
 };
