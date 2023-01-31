@@ -1,7 +1,9 @@
 /*MEGR 3156 robot code
-Group 3: Alex Norris, others..
-
+Group 3
+Project uses an Arduino uno as the microcontroller and a ps2 controller.
+There are 3 servos and 2 linear actuators powered by a TB6612FNG motor driver
 */
+
 #include <PS2X_lib.h>   //including the library for connecting to the ps2 controller
 #include <Servo.h>      //including the servo library
 #include "drivetrain.cpp"   //including the motors class for the robot
@@ -11,7 +13,7 @@ Group 3: Alex Norris, others..
 #define CLK A3          //defining the clock pin for the ps2 controller, pin 7
 int RYPOS=0;            //position (0-255) of the right joystick y axis
 int LYPOS=0;            //position (0-255) of the left joystick y axis
-bool triggers;          //
+bool triggers;          //sets the gripper state identifier
 PS2X ps2x;              //creating the ps2 controller object
 drivetrain motors;      //creating the motors object
 
