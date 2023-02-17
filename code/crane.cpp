@@ -7,28 +7,41 @@
 #define BIN1 6
 #define BIN2 7
 
+
 class Crane{
   private:
-    Motors HActuator{AIN1,AIN2,PWMA};
-    Motors VActuator{BIN1,BIN2,PWMB};
-  public:
-    Crane(){};
-    void HExtend(){
+    Motors HActuator{AIN1,AIN2,PWMA};       //setting up Horizontal Actuator 
+    Motors VActuator{BIN1,BIN2,PWMB};       //setting up Vertical Actuator 
+    void HExtend(){                         //Full speed horizontal extend
       HActuator.move(HIGH,LOW,255);
     }
-    void HRetract(){
+    void HRetract(){                        //Full speed horizontal retract
       HActuator.move(LOW,HIGH,255);
     }
-    void HStop(){
+    void HStop(){                           //stops horizontal actuator
       HActuator.move(HIGH,HIGH);
     }
-    void VExtend(){
+    void VExtend(){                         //Full speed vertical extend
       VActuator.move(HIGH,LOW,255);
     }
-    void VRetract(){
+    void VRetract(){                        //Full speed vertical retract
       VActuator.move(LOW,HIGH,255);
     }
-    void VStop(){
+    void VStop(){                           //stops vertical actuator
       VActuator.move(HIGH, HIGH);
+    }
+  public:
+    Crane(){};
+    void VMove(bool state){
+      if(state==true) HExtend();  
+      else  HRetract();
+    }
+    void HMove(bool state){
+      if(state==true) VExtend();  
+      else  VRetract();
+    }
+    void stop(){
+      VStop();
+      HStop();  
     }
 };
