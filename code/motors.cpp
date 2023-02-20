@@ -1,3 +1,4 @@
+//Team 3
 #include <Arduino.h>
 
 class Motors{
@@ -7,7 +8,7 @@ class Motors{
     int PinPWM;
   public:
     Motors(){}
-    Motors(int pin1,int pin2, int PWM){               //motor constructor
+    Motors(int pin1,int pin2, int PWM){                       //motor constructor
       PinIn1=pin1;
       pinMode(PinIn1,OUTPUT);
       PinIn2=pin2;

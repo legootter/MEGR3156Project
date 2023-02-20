@@ -1,3 +1,4 @@
+//Team 3
 #include <Arduino.h>
 #include <Servo.h>
 #define LEFTPIN 8

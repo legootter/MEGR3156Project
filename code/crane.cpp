@@ -1,3 +1,4 @@
+//Team 3
 #include "motors.cpp"
 #include "Arduino.h"
 #define PWMA 3
@@ -40,8 +41,12 @@ class Crane{
       if(state==true) VExtend();  
       else  VRetract();
     }
-    void stop(){
-      VStop();
-      HStop();  
+    void stop(bool actuator){ 
+      if(actuator==true){
+        VStop();
+      }
+      if(actuator==false){
+        HStop();
+      }
     }
 };
