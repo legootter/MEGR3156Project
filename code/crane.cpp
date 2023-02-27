@@ -1,52 +1,40 @@
 //Team 3
-#include "motors.cpp"
 #include "Arduino.h"
-#define PWMA 3
-#define PWMB 5
-#define AIN1 2
-#define AIN2 4
-#define BIN1 6
-#define BIN2 7
-
+#include <Servo.h>
+#define HActPin 9
+#define VActPin 10
 
 class Crane{
   private:
-    Motors HActuator{AIN1,AIN2,PWMA};       //setting up Horizontal Actuator 
-    Motors VActuator{BIN1,BIN2,PWMB};       //setting up Vertical Actuator 
-    void HExtend(){                         //Full speed horizontal extend
-      HActuator.move(HIGH,LOW,255);
-    }
-    void HRetract(){                        //Full speed horizontal retract
-      HActuator.move(LOW,HIGH,255);
-    }
-    void HStop(){                           //stops horizontal actuator
-      HActuator.move(HIGH,HIGH);
-    }
-    void VExtend(){                         //Full speed vertical extend
-      VActuator.move(HIGH,LOW,255);
-    }
-    void VRetract(){                        //Full speed vertical retract
-      VActuator.move(LOW,HIGH,255);
-    }
-    void VStop(){                           //stops vertical actuator
-      VActuator.move(HIGH, HIGH);
-    }
+    Servo HActuator;
+    Servo VActuator;
+    int HFULL=1400;//Horizontal only gets extended 40%
+    int VFULL=2000;//Vertical gets fully extended
+    int FULLRETRACT=1000;
   public:
-    Crane(){};
-    void VMove(bool state){
-      if(state==true) HExtend();  
-      else  HRetract();
-    }
-    void HMove(bool state){
-      if(state==true) VExtend();  
-      else  VRetract();
-    }
-    void stop(bool actuator){ 
+    Crane(){}
+    void extend(bool actuator){//true=Horizontal false=Vertical
       if(actuator==true){
-        VStop();
+        HActuator.writeMicroseconds(HFULL);
       }
-      if(actuator==false){
-        HStop();
+      else VActuator.writeMicroseconds(VFULL);
+    }
+    void retract(bool actuator){
+      if(actuator==true){
+        HActuator.writeMicroseconds(FULLRETRACT);
       }
+      else VActuator.writeMicroseconds(FULLRETRACT);
+    }
+    void move(int ms,bool actuator){
+      if(ms<0||ms>2000)return;
+      if(actuator==true){
+        HActuator.writeMicroseconds(ms);
+      }
+      else VActuator.writeMicroseconds(ms);
+    }
+    void intitialize(){                         //set up the servos
+      HActuator.attach(HActPin);
+      VActuator.attach(VActPin);
+      return;
     }
 };

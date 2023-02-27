@@ -22,10 +22,11 @@ PS2X ps2x;
 Drivetrain drivetrain;
 Gripper gripper;
 Crane crane;
-
++
 void setup() {
   drivetrain.intitialize();               //attach drivetrain servos
   gripper.initialize();                   //attach gripper servo 
+  crane.intitialize();  
   Serial.begin(9600);
   delay(6000);                            //allows controller to successfuly pair
   ps2x.config_gamepad(CLK,CMD,SEL,DAT);   //configures the controller
@@ -37,16 +38,14 @@ void loop() {
   if(ps2x.ButtonPressed(PSB_R2))gripper.status(false);                  //Engages gripper if R2 is pulled
 
   if(ps2x.Button(PSB_TRIANGLE)||ps2x.Button(PSB_CROSS)){                //Checks to see if Triangle or Cross is being held
-    if(ps2x.Button(PSB_TRIANGLE))crane.VMove(true);                     //If triangle is being pushed, raise Vertical Actuator
-    if(ps2x.Button(PSB_CROSS))crane.VMove(false);                       //If X is being pushed, lower Vertical Actuator
+    if(ps2x.Button(PSB_TRIANGLE))crane.extend(false);                   //If triangle is being pushed, raise Vertical Actuator
+    if(ps2x.Button(PSB_CROSS))crane.retract(false);                     //If X is being pushed, lower Vertical Actuator
   }
-  else crane.stop(true);                                                //Stops Actuator when button is not being pressed
   
   if(ps2x.Button(PSB_PAD_UP)||ps2x.Button(PSB_PAD_DOWN)){               //check to see if either the D pad up or downbuttons have been pushed
-    if(ps2x.Button(PSB_PAD_UP))crane.HMove(true);                       //check to see if D pad up was pushed
-    if(ps2x.Button(PSB_PAD_DOWN))crane.HMove(false);                    //check to see if D pad down was pushed                                               //Extend/retract the horizontal actuator
+    if(ps2x.Button(PSB_PAD_UP))crane.extend(true);                      //check to see if D pad up was pushed
+    if(ps2x.Button(PSB_PAD_DOWN))crane.retract(true);                   //check to see if D pad down was pushed                                               //Extend/retract the horizontal actuator
   }
-  else crane.stop(false);
 
   RYPOS=ps2x.Analog(PSS_RY);                                            //get the Right joystick Y axis value
   LYPOS=ps2x.Analog(PSS_LY);                                            //get the Left joystick Y axis value
